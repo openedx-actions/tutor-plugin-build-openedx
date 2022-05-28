@@ -12,19 +12,38 @@ branding:
   icon: 'cloud'
   color: 'orange'
 inputs:
-  subdomain:
-    description: 'www'
-    required: true
-  domain-name:
-    description: 'example.com'
-    required: true
-  site-name:
-    description: 'University of the Galaxy'
-    required: true
   aws-ecr-repository:
-    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx_backup"'
+    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
     required: false
-    default: 'openedx_mfe'
+    default: 'openedx'
+  custom-theme-repository:
+    description: 'URL for the Open edX custom theme to use for this build'
+    required: false
+    default: 'lpm0073/edx.custom-theme'
+  custom-theme-repository-ref:
+    description: 'branch or release of the Open edX custom theme'
+    required: false
+    default: 'master'
+  custom-plugin-repository:
+    description: 'URL for the Open edX custom plugin to use for this build'
+    required: false
+    default: 'lpm0073/openedx-plugin-example'
+  custom-plugin-repository-ref:
+    description: 'branch or release of the Open edX custom plugin'
+    required: false
+    default: 'main'
+  custom-xblock-repository:
+    description: 'Repository anme of the additional XBlock repository to install for this build'
+    required: false
+    default: 'edx-ora2'
+  custom-xblock-repository-organization:
+    description: 'the Github organization containing the XBlock repository to install for this build'
+    required: false
+    default: 'openedx'
+  custom-xblock-repository-ref:
+    description: 'branch or release of the XBlock repository'
+    required: false
+    default: 'master'
 outputs:
   docker-container-url:
     description: 'The URL of the AWS ECR Docker container that was created and uploaded'
