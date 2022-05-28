@@ -56,9 +56,6 @@ runs:
     - name: Setup environment
       run: |
         echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
-        echo "SUBDOMAIN=${{ inputs.subdomain }}" >> $GITHUB_ENV
-        echo "DOMAIN_NAME=${{ inputs.domain-name }}" >> $GITHUB_ENV
-        echo "SITE_NAME=${{ inputs.site-name }}" >> $GITHUB_ENV
       shell: bash
 
     - name: Set up Docker Buildx
