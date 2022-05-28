@@ -46,4 +46,11 @@ jobs:
         uses: openedx-actions/tutor-plugin-build-openedx
         with:
           aws-ecr-repo: openedx
+          custom-theme-repository: 'lpm0073/edx.custom-theme'
+          custom-theme-repository-ref: 'master'
+          custom-plugin-repository: 'lpm0073/openedx-plugin-example'
+          custom-plugin-repository-ref: 'main'
+          custom-xblock-repository: 'edx-ora2'
+          custom-xblock-repository-organization: 'openedx'
+          custom-xblock-repository-ref: 'master'
 ```
