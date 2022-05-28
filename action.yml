@@ -89,14 +89,9 @@ runs:
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
       shell: bash
 
-    - name: Install mfe plugin
-      id: pip-install-plugin
-      run: $GITHUB_ACTION_PATH/scripts/install-mfe.sh
-      shell: bash
-
     - name: Build the image
       id: tutor-build-image
-      run: tutor images build backup
+      run: tutor images build openedx
       shell: bash
 
     - name: Push the image
