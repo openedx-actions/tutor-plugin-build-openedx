@@ -1,0 +1,78 @@
+#------------------------------------------------------------------------------
+#
+# see
+#  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+#  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+#
+#------------------------------------------------------------------------------
+name: '"Tutor Build openedx" Action For GitHub Actions'
+description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
+branding:
+  icon: 'cloud'
+  color: 'orange'
+inputs:
+  aws-ecr-repository:
+    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
+    required: false
+    default: 'openedx'
+outputs:
+  docker-container-url:
+    description: 'The URL of the AWS ECR Docker container that was created and uploaded'
+    value: ${{ steps.docker-image.outputs.uri }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup environment
+      run: |
+        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set up Docker Buildx
+      id: setup-docker
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Create the AWS ECR repository
+      id: create-repository
+      uses: openedx-actions/aws-ecr-create@v0.0.2
+      with:
+        aws-ecr-repository: ${{ inputs.aws-ecr-repository }}
+
+    - name: Intialize environment variables
+      id: init-env
+      run: |
+        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Install Tutor
+      id: install-tutor
+      run: $GITHUB_ACTION_PATH/scripts/install-tutor.sh
+      shell: bash
+
+    - name: Set repository tag
+      id: docker-set-tag
+      run: |
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Build the image
+      id: tutor-build-image
+      run: tutor images build openedx
+      shell: bash
+
+    - name: Push the image
+      id: docker-push-image
+      run: $GITHUB_ACTION_PATH/scripts/upload-to-aws-ecr.sh
+      shell: bash
+
+    - name: Docker image:tag
+      id: docker-image
+      run: |
+        echo "DOCKER_IMAGE=${{ inputs.aws-ecr-registry }}/${{ inputs.aws-ecr-repository }}:${REPOSITORY_TAG}" >> $GITHUB_ENV
+        echo "::set-output name=uri::$(echo $DOCKER_IMAGE)"
+      shell: bash
