@@ -6,8 +6,8 @@
 #  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 #
 #------------------------------------------------------------------------------
-name: '"Build  Tutor Open edX Micro Front-end (MFE) Plugin" Action For GitHub Actions'
-description: 'Use Tutor to build a Docker container for the Open edX Micro Front-end plugin, then upload to AWS ECR'
+name: '"Tutor Build openedx" Action For GitHub Actions'
+description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
 branding:
   icon: 'cloud'
   color: 'orange'
