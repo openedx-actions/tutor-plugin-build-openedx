@@ -91,29 +91,6 @@ runs:
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
       shell: bash
 
-    - name: Checkout custom theme repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-theme-repository }}
-        path: ${THEMES_PATH}/custom-edx-theme
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-theme-repository-ref }}
-
-    - name: Checkout custom edx plugin repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-plugin-repository }}
-        path: ${PLUGINS_PATH}/custom-edx-plugin
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-plugin-repository-ref }}
-
-    - name: Checkout xblock repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
-        path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-xblock-repository-ref }}
 
     - name: Add private.txt requirements
       id: add-requirements
