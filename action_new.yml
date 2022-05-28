@@ -1,0 +1,141 @@
+#------------------------------------------------------------------------------
+#
+# see
+#  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+#  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+#
+#------------------------------------------------------------------------------
+name: '"Tutor Build openedx" Action For GitHub Actions'
+description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
+branding:
+  icon: 'cloud'
+  color: 'orange'
+inputs:
+  aws-ecr-repository:
+    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
+    required: false
+    default: 'openedx'
+  custom-theme-repository:
+    description: 'URL for the Open edX custom theme to use for this build'
+    required: false
+    default: 'lpm0073/edx.custom-theme'
+  custom-theme-repository-ref:
+    description: 'branch or release of the Open edX custom theme'
+    required: false
+    default: 'master'
+  custom-plugin-repository:
+    description: 'URL for the Open edX custom plugin to use for this build'
+    required: false
+    default: 'lpm0073/openedx-plugin-example'
+  custom-plugin-repository-ref:
+    description: 'branch or release of the Open edX custom plugin'
+    required: false
+    default: 'main'
+  custom-xblock-repository:
+    description: 'Repository anme of the additional XBlock repository to install for this build'
+    required: false
+    default: 'edx-ora2'
+  custom-xblock-repository-organization:
+    description: 'the Github organization containing the XBlock repository to install for this build'
+    required: false
+    default: 'openedx'
+  custom-xblock-repository-ref:
+    description: 'branch or release of the XBlock repository'
+    required: false
+    default: 'master'
+outputs:
+  docker-container-url:
+    description: 'The URL of the AWS ECR Docker container that was created and uploaded'
+    value: ${{ steps.docker-image.outputs.uri }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup environment
+      run: |
+        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set up Docker Buildx
+      id: setup-docker
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Create the AWS ECR repository
+      id: create-repository
+      uses: openedx-actions/aws-ecr-create@v0.0.2
+      with:
+        aws-ecr-repository: ${{ inputs.aws-ecr-repository }}
+
+    - name: Intialize environment variables
+      id: init-env
+      run: |
+        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Install Tutor
+      id: install-tutor
+      run: $GITHUB_ACTION_PATH/scripts/install-tutor.sh
+      shell: bash
+
+    - name: Set Tutor Root in the Workspace
+        run: |
+          echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TUTOR_ROOT=./tutor" >> $GITHUB_ENV
+          echo "THEMES_PATH=./tutor/env/build/openedx/themes" >> $GITHUB_ENV
+          echo "PLUGINS_PATH=./tutor/env/build/openedx/requirements" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Checkout custom theme repo
+      uses: actions/checkout@v2
+      with:
+        repository: {{ inputs.custom-theme-repository }}
+        path: ${THEMES_PATH}/custom-edx-theme
+        token: ${{ secrets.PAT }}
+        ref: {{ inputs.custom-theme-repository-ref }}
+
+    - name: Checkout custom edx plugin repo
+      uses: actions/checkout@v2
+      with:
+        repository: {{ inputs.custom-plugin-repository }}
+        path: ${PLUGINS_PATH}/custom-edx-plugin
+        token: ${{ secrets.PAT }}
+        ref: {{ inputs.custom-plugin-repository-ref }}
+
+    - name: Checkout xblock repo
+      uses: actions/checkout@v2
+      with:
+        repository: {{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
+        path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
+        token: ${{ secrets.PAT }}
+        ref: {{ inputs.custom-xblock-repository-ref }}
+
+    - name: Add private.txt requirements
+        run: cp ./requirements/private.txt ${PLUGINS_PATH}
+        shell: bash
+
+    - name: Render Tutor Config
+      id: tutor-config-save
+      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+      shell: bash
+
+    - name: Build the image
+      id: tutor-build-image
+      run: tutor images build openedx
+      shell: bash
+
+    - name: Push the image
+      id: docker-push-image
+      run: $GITHUB_ACTION_PATH/scripts/upload-to-aws-ecr.sh
+      shell: bash
+
+    - name: Docker image:tag
+      id: docker-image
+      run: |
+        echo "DOCKER_IMAGE=${{ inputs.aws-ecr-registry }}/${{ inputs.aws-ecr-repository }}:${REPOSITORY_TAG}" >> $GITHUB_ENV
+        echo "::set-output name=uri::$(echo $DOCKER_IMAGE)"
+      shell: bash

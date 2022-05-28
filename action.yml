@@ -1,48 +1,30 @@
 #------------------------------------------------------------------------------
 #
+#
 # see
 #  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 #  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 #
 #------------------------------------------------------------------------------
-name: '"Tutor Build openedx" Action For GitHub Actions'
-description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
+name: '"Build Tutor Open edX Micro Front-end (MFE) Plugin" Action For GitHub Actions'
+description: 'Use Tutor to build a Docker container for the Open edX Micro Front-end plugin, then upload to AWS ECR'
 branding:
   icon: 'cloud'
   color: 'orange'
 inputs:
+  subdomain:
+    description: 'www'
+    required: true
+  domain-name:
+    description: 'example.com'
+    required: true
+  site-name:
+    description: 'University of the Galaxy'
+    required: true
   aws-ecr-repository:
-    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
+    description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx_backup"'
     required: false
-    default: 'openedx'
-  custom-theme-repository:
-    description: 'URL for the Open edX custom theme to use for this build'
-    required: false
-    default: 'lpm0073/edx.custom-theme'
-  custom-theme-repository-ref:
-    description: 'branch or release of the Open edX custom theme'
-    required: false
-    default: 'master'
-  custom-plugin-repository:
-    description: 'URL for the Open edX custom plugin to use for this build'
-    required: false
-    default: 'lpm0073/openedx-plugin-example'
-  custom-plugin-repository-ref:
-    description: 'branch or release of the Open edX custom plugin'
-    required: false
-    default: 'main'
-  custom-xblock-repository:
-    description: 'Repository anme of the additional XBlock repository to install for this build'
-    required: false
-    default: 'edx-ora2'
-  custom-xblock-repository-organization:
-    description: 'the Github organization containing the XBlock repository to install for this build'
-    required: false
-    default: 'openedx'
-  custom-xblock-repository-ref:
-    description: 'branch or release of the XBlock repository'
-    required: false
-    default: 'master'
+    default: 'openedx_mfe'
 outputs:
   docker-container-url:
     description: 'The URL of the AWS ECR Docker container that was created and uploaded'
@@ -50,11 +32,14 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
 
     - name: Setup environment
       run: |
         echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
+        echo "SUBDOMAIN=${{ inputs.subdomain }}" >> $GITHUB_ENV
+        echo "DOMAIN_NAME=${{ inputs.domain-name }}" >> $GITHUB_ENV
+        echo "SITE_NAME=${{ inputs.site-name }}" >> $GITHUB_ENV
       shell: bash
 
     - name: Set up Docker Buildx
@@ -82,50 +67,20 @@ runs:
       run: $GITHUB_ACTION_PATH/scripts/install-tutor.sh
       shell: bash
 
-    - name: Set Tutor Root in the Workspace
-        run: |
-          echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-          echo "TUTOR_ROOT=./tutor" >> $GITHUB_ENV
-          echo "THEMES_PATH=./tutor/env/build/openedx/themes" >> $GITHUB_ENV
-          echo "PLUGINS_PATH=./tutor/env/build/openedx/requirements" >> $GITHUB_ENV
+    - name: Set repository tag
+      id: docker-set-tag
+      run: |
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
       shell: bash
 
-    - name: Checkout custom theme repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-theme-repository }}
-        path: ${THEMES_PATH}/custom-edx-theme
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-theme-repository-ref }}
-
-    - name: Checkout custom edx plugin repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-plugin-repository }}
-        path: ${PLUGINS_PATH}/custom-edx-plugin
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-plugin-repository-ref }}
-
-    - name: Checkout xblock repo
-      uses: actions/checkout@v2
-      with:
-        repository: {{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
-        path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
-        token: ${{ secrets.PAT }}
-        ref: {{ inputs.custom-xblock-repository-ref }}
-
-    - name: Add private.txt requirements
-        run: cp ./requirements/private.txt ${PLUGINS_PATH}
-        shell: bash
-
-    - name: Render Tutor Config
-      id: tutor-config-save
-      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+    - name: Install mfe plugin
+      id: pip-install-plugin
+      run: $GITHUB_ACTION_PATH/scripts/install-mfe.sh
       shell: bash
 
     - name: Build the image
       id: tutor-build-image
-      run: tutor images build openedx
+      run: tutor images build backup
       shell: bash
 
     - name: Push the image
