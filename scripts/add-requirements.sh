@@ -5,4 +5,4 @@
 #
 #---------------------------------------------------------
 
-cp ./requirements/private.txt ${PLUGINS_PATH}
+cp ${{ github.action_path }}/requirements/private.txt ${PLUGINS_PATH}
