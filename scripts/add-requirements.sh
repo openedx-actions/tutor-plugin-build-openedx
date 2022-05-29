@@ -7,4 +7,5 @@
 
 echo "adding requirementws"
 pwd
+ls -lha
 cp ./requirements/private.txt ${PLUGINS_PATH}
