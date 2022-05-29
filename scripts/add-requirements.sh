@@ -5,7 +5,7 @@
 #
 #---------------------------------------------------------
 
-cat <<EOT > ${PLUGINS_PATH}/private.txt
+cat <<EOT>> ${PLUGINS_PATH}/private.txt
 # This file will drive the x-blocks and requirements customization
 # as described in https://docs.tutor.overhang.io/configuration.html#installing-extra-xblocks-and-requirements
 # It will be placed on the location tutor expect is during the CI build.
