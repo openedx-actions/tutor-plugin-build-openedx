@@ -52,11 +52,6 @@ runs:
   steps:
     - uses: actions/checkout@v2
 
-    - name: Setup environment
-      run: |
-        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
-      shell: bash
-
     - name: Set up Docker Buildx
       id: setup-docker
       uses: docker/setup-buildx-action@v1
@@ -75,6 +70,8 @@ runs:
       id: init-env
       run: |
         echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> ${{ github.env }}
+        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
       shell: bash
 
     - name: Install Tutor
@@ -87,15 +84,10 @@ runs:
       run: tutor config save --set DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}
       shell: bash
 
-    - name: Set Tutor Root in the Workspace
+    - name: Set Tutor-dependent environment variables
       run: |
-        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> ${{ github.env }}
-
-        echo "REPOSITORY_TAG=${REPOSITORY_TAG}"
-        echo "THEMES_PATH=${THEMES_PATH}"
-        echo "PLUGINS_PATH=${PLUGINS_PATH}"
       shell: bash
 
     - name: Checkout custom theme repo
