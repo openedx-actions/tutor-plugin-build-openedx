@@ -105,7 +105,6 @@ runs:
       with:
         repository: ${THEME_REPO}
         path: ${THEMES_PATH}/custom-edx-theme
-        token: ${{ secrets.PAT }}
         ref: ${THEME_REPO_REF}
 
     - name: Checkout custom edx plugin repo
@@ -113,7 +112,6 @@ runs:
       with:
         repository: ${PLUGIN_REPO}
         path: ${PLUGINS_PATH}/custom-edx-plugin
-        token: ${{ secrets.PAT }}
         ref: ${PLUGIN_REPO_REF}
 
     - name: Checkout xblock repo
@@ -121,7 +119,6 @@ runs:
       with:
         repository: ${XBLOCK_REPO}
         path: ${PLUGINS_PATH}/${XBLOCK_NAME}
-        token: ${{ secrets.PAT }}
         ref: ${THEME_REPO_REF}
 
     - name: Add private.txt requirements
