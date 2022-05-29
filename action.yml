@@ -82,6 +82,11 @@ runs:
       run: $GITHUB_ACTION_PATH/scripts/install-tutor.sh
       shell: bash
 
+    - name: Render Tutor Config
+      id: tutor-config-save
+      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+      shell: bash
+
     - name: Set Tutor Root in the Workspace
       run: |
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
@@ -90,15 +95,9 @@ runs:
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
       shell: bash
 
-
     - name: Add private.txt requirements
       id: add-requirements
       run: $GITHUB_ACTION_PATH/scripts/add-requirements.sh
-      shell: bash
-
-    - name: Render Tutor Config
-      id: tutor-config-save
-      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
       shell: bash
 
     - name: Build the image
