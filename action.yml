@@ -72,7 +72,7 @@ runs:
 
     - name: Install Tutor
       id: install-tutor
-      run: ${{ github.action_path }}/scripts/install-tutor.sh
+      run: ./scripts/install-tutor.sh
       shell: bash
 
     - name: Intialize environment variables
@@ -129,7 +129,7 @@ runs:
 
     - name: Add private.txt requirements
       id: add-requirements
-      run: ${{ github.action_path }}/scripts/add-requirements.sh
+      run: ./scripts/add-requirements.sh
       shell: bash
 
     - name: Review theme and requirements folders
@@ -148,7 +148,7 @@ runs:
 
     - name: Push the image
       id: docker-push-image
-      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
+      run: ./scripts/upload-to-aws-ecr.sh
       shell: bash
 
     - name: Docker image:tag
