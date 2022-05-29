@@ -84,12 +84,12 @@ runs:
 
     - name: Render Tutor Config
       id: tutor-config-save
-      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${ECR_REGISTRY}/${ECR_REPOSITORY}:${REPOSITORY_TAG}
+      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}
       shell: bash
 
     - name: Set Tutor Root in the Workspace
       run: |
-        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> ${{ github.env }}
         echo "PLUGIN_REPO=${{ inputs.custom-plugin-repository }}" >> ${{ github.env }}
@@ -121,26 +121,26 @@ runs:
     - name: Checkout custom theme repo
       uses: actions/checkout@v2
       with:
-        repository: ${THEME_REPO}
+        repository: ${{ inputs.custom-theme-repository }}
         path: ${THEMES_PATH}/custom-edx-theme
         token: ${{ github.token }}
-        ref: ${THEME_REPO_REF}
+        ref: ${{ inputs.custom-theme-repository_ref }}
 
     - name: Checkout custom edx plugin repo
       uses: actions/checkout@v2
       with:
-        repository: ${PLUGIN_REPO}
+        repository: ${{ inputs.custom-plugin-repository }}
         path: ${PLUGINS_PATH}/custom-edx-plugin
         token: ${{ github.token }}
-        ref: ${PLUGIN_REPO_REF}
+        ref: ${{ inputs.custom-plugin-repository-ref }}
 
     - name: Checkout xblock repo
       uses: actions/checkout@v2
       with:
-        repository: ${XBLOCK_REPO}
-        path: ${PLUGINS_PATH}/${XBLOCK_NAME}
+        repository: ${{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
+        path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
-        ref: ${THEME_REPO_REF}
+        ref: master
 
     - name: Add private.txt requirements
       id: add-requirements
