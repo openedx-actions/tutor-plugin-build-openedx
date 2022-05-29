@@ -139,6 +139,20 @@ runs:
         ls $THEMES_PATH -lha
         echo "plugins folder:"
         ls $PLUGINS_PATH -lha
-        echo "custom-edx-plugin looks like this:"
-        ls $PLUGINS_PATH/${{ inputs.custom-plugin-repository }} -lha
+      shell: bash
+
+    - name: Build the image
+      id: tutor-build-image
+      run: tutor images build openedx
+      shell: bash
+
+    - name: Push the image
+      id: docker-push-image
+      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
+      shell: bash
+
+    - name: Docker image:tag
+      id: docker-image
+      run: |
+        echo "::set-output name=uri::$(echo $DOCKER_IMAGE_OPENEDX)"
       shell: bash
