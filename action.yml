@@ -78,6 +78,7 @@ runs:
         echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
         echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
+        echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
       shell: bash
 
     - name: Initialize Docker image URI
@@ -117,7 +118,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: ${PLUGINS_PATH}/${{ inputs.custom-xblock-repository }}
+        path: ${PLUGINS_PATH}/${CUSTOM_XBLOCK}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 
