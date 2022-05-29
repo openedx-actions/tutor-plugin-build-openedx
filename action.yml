@@ -79,6 +79,7 @@ runs:
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
         echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
         echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
+        echo "CUSTOM_PLUGIN=${{ inputs.custom-plugin-repository }}" >> ${{ github.env }}
       shell: bash
 
     - name: Initialize Docker image URI
@@ -110,7 +111,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-plugin-repository }}
-        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin
+        path: ./tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-plugin-repository-ref }}
 
@@ -118,7 +119,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin/${{ inputs.custom-xblock-repository }}
+        path: ./tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 

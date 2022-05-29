@@ -23,7 +23,7 @@ cat <<EOT>> ${PLUGINS_PATH}/private.txt
 #factory_boy
 #django-debug-toolbar
 
--e ./custom-edx-plugin
+-e ./${CUSTOM_PLUGIN}
 -e ./${CUSTOM_XBLOCK}
 EOT
 
