@@ -98,6 +98,17 @@ runs:
         echo "THEME_REPO_REF={{ inputs.custom-theme-repository-ref }}" >> ${{ github.env }}
         echo "XBLOCK_NAME={{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
+
+        echo "REPOSITORY_TAG=${REPOSITORY_TAG}""
+        echo "THEMES_PATH=${THEMES_PATH}"
+        echo "PLUGINS_PATH=${PLUGINS_PATH}"
+        echo "PLUGIN_REPO=${PLUGIN_REPO}
+        echo "PLUGIN_REPO_REF=${PLUGIN_REPO_REF}"
+        echo "THEME_REPO=${THEME_REPO}"
+        echo "THEME_REPO_REF=${THEME_REPO_REF}"
+        echo "XBLOCK_NAME=${XBLOCK_NAME}"
+        echo "XBLOCK_REPO=${XBLOCK_REPO}"
+
       shell: bash
 
     - name: Checkout custom theme repo
