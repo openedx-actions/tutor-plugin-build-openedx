@@ -29,4 +29,4 @@ EOT
 
 echo "saved to ${PLUGINS_PATH}/private.txt"
 echo "file looks like this...."
-cat ${PLUGINS_PATH}/private.txt"
+cat "${PLUGINS_PATH}/private.txt"
