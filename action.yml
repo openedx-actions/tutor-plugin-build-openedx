@@ -49,6 +49,8 @@ outputs:
     value: ${{ steps.docker-image.outputs.uri }}
 runs:
   using: "composite"
+  env:
+    MY_ENVIRONMENT_VARIABLE: hello-world
   steps:
     - uses: actions/checkout@v2
 
@@ -99,15 +101,16 @@ runs:
         echo "XBLOCK_NAME={{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
 
-        echo "REPOSITORY_TAG=${REPOSITORY_TAG}""
-        echo "THEMES_PATH=${THEMES_PATH}"
-        echo "PLUGINS_PATH=${PLUGINS_PATH}"
-        echo "PLUGIN_REPO=${PLUGIN_REPO}
-        echo "PLUGIN_REPO_REF=${PLUGIN_REPO_REF}"
-        echo "THEME_REPO=${THEME_REPO}"
-        echo "THEME_REPO_REF=${THEME_REPO_REF}"
-        echo "XBLOCK_NAME=${XBLOCK_NAME}"
-        echo "XBLOCK_REPO=${XBLOCK_REPO}"
+        echo MY_ENVIRONMENT_VARIABLE=$MY_ENVIRONMENT_VARIABLE
+        echo "REPOSITORY_TAG=$REPOSITORY_TAG"
+        echo "THEMES_PATH=$THEMES_PATH"
+        echo "PLUGINS_PATH=$PLUGINS_PATH"
+        echo "PLUGIN_REPO=$PLUGIN_REPO"
+        echo "PLUGIN_REPO_REF=$PLUGIN_REPO_REF"
+        echo "THEME_REPO=$THEME_REPO"
+        echo "THEME_REPO_REF=$THEME_REPO_REF"
+        echo "XBLOCK_NAME=$XBLOCK_NAME"
+        echo "XBLOCK_REPO=$XBLOCK_REPO"
 
       shell: bash
 
