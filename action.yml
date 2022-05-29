@@ -117,7 +117,7 @@ runs:
     - name: Checkout xblock repo
       uses: actions/checkout@v2
       with:
-        repository: ${{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
+        repository: ${{inputs.custom-xblock-repository-organization}}/{{inputs.custom-xblock-repository}}
         path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
