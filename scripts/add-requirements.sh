@@ -5,4 +5,6 @@
 #
 #---------------------------------------------------------
 
+echo "adding requirementws"
+pwd
 cp ./requirements/private.txt ${PLUGINS_PATH}
