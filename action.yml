@@ -3,7 +3,7 @@
 # see
 #  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 #  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
-#
+#  - https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
 #------------------------------------------------------------------------------
 name: '"Tutor Build openedx" Action For GitHub Actions'
 description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
@@ -54,7 +54,7 @@ runs:
 
     - name: Setup environment
       run: |
-        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
+        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
       shell: bash
 
     - name: Set up Docker Buildx
@@ -74,12 +74,12 @@ runs:
     - name: Intialize environment variables
       id: init-env
       run: |
-        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> ${{ github.env }}
       shell: bash
 
     - name: Install Tutor
       id: install-tutor
-      run: $GITHUB_ACTION_PATH/scripts/install-tutor.sh
+      run: ${{ github.action_path }}/scripts/install-tutor.sh
       shell: bash
 
     - name: Render Tutor Config
@@ -89,15 +89,15 @@ runs:
 
     - name: Set Tutor Root in the Workspace
       run: |
-        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-        echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> $GITHUB_ENV
-        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> $GITHUB_ENV
-        echo "PLUGIN_REPO={{ inputs.custom-plugin-repository }}" >> $GITHUB_ENV
-        echo "PLUGIN_REPO_REF={{ inputs.custom-plugin-repository-ref }}" >> $GITHUB_ENV
-        echo "THEME_REPO={{ inputs.custom-theme-repository }}" >> $GITHUB_ENV
-        echo "THEME_REPO_REF={{ inputs.custom-theme-repository-ref }}" >> $GITHUB_ENV
-        echo "XBLOCK_NAME={{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
-        echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
+        echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
+        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> ${{ github.env }}
+        echo "PLUGIN_REPO={{ inputs.custom-plugin-repository }}" >> ${{ github.env }}
+        echo "PLUGIN_REPO_REF={{ inputs.custom-plugin-repository-ref }}" >> ${{ github.env }}
+        echo "THEME_REPO={{ inputs.custom-theme-repository }}" >> ${{ github.env }}
+        echo "THEME_REPO_REF={{ inputs.custom-theme-repository-ref }}" >> ${{ github.env }}
+        echo "XBLOCK_NAME={{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
+        echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
       shell: bash
 
     - name: Checkout custom theme repo
@@ -105,6 +105,7 @@ runs:
       with:
         repository: ${THEME_REPO}
         path: ${THEMES_PATH}/custom-edx-theme
+        token: ${{ github.token }}
         ref: ${THEME_REPO_REF}
 
     - name: Checkout custom edx plugin repo
@@ -112,6 +113,7 @@ runs:
       with:
         repository: ${PLUGIN_REPO}
         path: ${PLUGINS_PATH}/custom-edx-plugin
+        token: ${{ github.token }}
         ref: ${PLUGIN_REPO_REF}
 
     - name: Checkout xblock repo
@@ -119,11 +121,12 @@ runs:
       with:
         repository: ${XBLOCK_REPO}
         path: ${PLUGINS_PATH}/${XBLOCK_NAME}
+        token: ${{ github.token }}
         ref: ${THEME_REPO_REF}
 
     - name: Add private.txt requirements
       id: add-requirements
-      run: $GITHUB_ACTION_PATH/scripts/add-requirements.sh
+      run: ${{ github.action_path }}/scripts/add-requirements.sh
       shell: bash
 
     - name: Build the image
@@ -133,12 +136,12 @@ runs:
 
     - name: Push the image
       id: docker-push-image
-      run: $GITHUB_ACTION_PATH/scripts/upload-to-aws-ecr.sh
+      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
       shell: bash
 
     - name: Docker image:tag
       id: docker-image
       run: |
-        echo "DOCKER_IMAGE=${{ inputs.aws-ecr-registry }}/${{ inputs.aws-ecr-repository }}:${REPOSITORY_TAG}" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE=${{ inputs.aws-ecr-registry }}/${{ inputs.aws-ecr-repository }}:${REPOSITORY_TAG}" >> ${{ github.env }}
         echo "::set-output name=uri::$(echo $DOCKER_IMAGE)"
       shell: bash
