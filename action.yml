@@ -26,7 +26,11 @@ inputs:
   custom-plugin-repository:
     description: 'URL for the Open edX custom plugin to use for this build'
     required: false
-    default: 'lpm0073/openedx-plugin-example'
+    default: 'openedx-plugin-example'
+  custom-plugin-repository-organization:
+    description: 'the Github organization containing the custom plugin repository to install for this build'
+    required: false
+    default: 'lpm0073'
   custom-plugin-repository-ref:
     description: 'branch or release of the Open edX custom plugin'
     required: false
@@ -110,7 +114,7 @@ runs:
     - name: Checkout custom edx plugin repo
       uses: actions/checkout@v2
       with:
-        repository: ${{ inputs.custom-plugin-repository }}
+        repository: ${{ inputs.custom-plugin-repository-organization }}/${{ inputs.custom-plugin-repository }}
         path: ./tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-plugin-repository-ref }}
