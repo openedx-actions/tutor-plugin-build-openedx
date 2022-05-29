@@ -1,4 +1,9 @@
 #------------------------------------------------------------------------------
+# Build and push a Docker image constisting of
+#   - edx-platform
+#   - custom theme repository
+#   - custom Open edX plugin
+#   - custom Xblock
 #
 # see
 #  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
@@ -137,7 +142,7 @@ runs:
       run: |
         echo "theme folder contents:"
         ls $THEMES_PATH -lha
-        echo "plugins folder:"
+        echo "plugins folder contents:"
         ls $PLUGINS_PATH -lha
       shell: bash
 

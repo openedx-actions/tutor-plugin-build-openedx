@@ -48,7 +48,8 @@ jobs:
           aws-ecr-repo: openedx
           custom-theme-repository: 'lpm0073/edx.custom-theme'
           custom-theme-repository-ref: 'master'
-          custom-plugin-repository: 'lpm0073/openedx-plugin-example'
+          custom-plugin-repository: 'openedx-plugin-example'
+          custom-plugin-repository-organization: lpm0073
           custom-plugin-repository-ref: 'main'
           custom-xblock-repository: 'edx-ora2'
           custom-xblock-repository-organization: 'openedx'
