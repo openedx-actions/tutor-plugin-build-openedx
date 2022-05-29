@@ -93,15 +93,17 @@ runs:
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> $GITHUB_ENV
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> $GITHUB_ENV
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
+        echo "PLUGIN_REPO={{ inputs.custom-plugin-repository }}" >> $GITHUB_ENV
+        echo "PLUGIN_REPO_REF={{ inputs.custom-plugin-repository-ref }}" >> $GITHUB_ENV
       shell: bash
 
     - name: Checkout custom edx plugin repo
       uses: actions/checkout@v2
       with:
-        repository: lpm0073/openedx-plugin-example
+        repository: ${PLUGIN_REPO}
         path: ${PLUGINS_PATH}/custom-edx-plugin
         token: ${{ secrets.PAT }}
-        ref: main
+        ref: ${PLUGIN_REPO_REF}
 
     - name: Add private.txt requirements
       id: add-requirements
