@@ -49,8 +49,6 @@ outputs:
     value: ${{ steps.docker-image.outputs.uri }}
 runs:
   using: "composite"
-  env:
-    MY_ENVIRONMENT_VARIABLE: hello-world
   steps:
     - uses: actions/checkout@v2
 
@@ -101,7 +99,13 @@ runs:
         echo "XBLOCK_NAME={{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
 
-        echo MY_ENVIRONMENT_VARIABLE=$MY_ENVIRONMENT_VARIABLE
+        echo "custom-theme-repository={{ inputs.custom-theme-repository }}"
+        echo "AWS_ECR_REGISTRY=$AWS_ECR_REGISTRY"
+        echo "AWS_ECR_REGISTRY=${AWS_ECR_REGISTRY}"
+        echo "ECR_REPOSITORY=${ECR_REPOSITORY}"
+        echo "REPOSITORY_TAG=${REPOSITORY_TAG}"
+        echo "THEMES_PATH=${THEMES_PATH}"
+        echo "PLUGINS_PATH=${PLUGINS_PATH}"
         echo "REPOSITORY_TAG=$REPOSITORY_TAG"
         echo "THEMES_PATH=$THEMES_PATH"
         echo "PLUGINS_PATH=$PLUGINS_PATH"
