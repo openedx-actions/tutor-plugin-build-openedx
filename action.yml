@@ -140,5 +140,5 @@ runs:
         echo "plugins folder:"
         ls $PLUGINS_PATH -lha
         echo "custom-edx-plugin looks like this:"
-        ls $PLUGINS_PATH/custom-edx-plugin -lha
+        ls $PLUGINS_PATH/${{ inputs.custom-plugin-repository }} -lha
       shell: bash
