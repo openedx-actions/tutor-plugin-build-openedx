@@ -5,7 +5,7 @@
 #
 #---------------------------------------------------------
 pip install --upgrade pyyaml
-echo "TUTOR_ROOT=./tutor" >> $GITHUB_ENV
+echo "TUTOR_ROOT=$GITHUB_ACTION_PATH/tutor" >> $GITHUB_ENV
 pip install tutor
 echo "TUTOR_VERSION=$(tutor --version | cut -f3 -d' ')" >> $GITHUB_ENV
 echo "TUTOR_ENABLE_HTTPS=true" >> $GITHUB_ENV

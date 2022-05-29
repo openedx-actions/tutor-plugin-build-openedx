@@ -95,6 +95,14 @@ runs:
         echo "XBLOCK_REPO={{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
       shell: bash
 
+    - name: Checkout custom edx plugin repo
+      uses: actions/checkout@v2
+      with:
+        repository: lpm0073/openedx-plugin-example
+        path: ${PLUGINS_PATH}/custom-edx-plugin
+        token: ${{ secrets.PAT }}
+        ref: main
+
     - name: Add private.txt requirements
       id: add-requirements
       run: $GITHUB_ACTION_PATH/scripts/add-requirements.sh
