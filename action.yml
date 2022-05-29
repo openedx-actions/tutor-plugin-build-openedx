@@ -110,7 +110,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-plugin-repository }}
-        path: ${PLUGINS_PATH}/custom-edx-plugin
+        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin
         token: ${{ github.token }}
         ref: ${{ inputs.custom-plugin-repository-ref }}
 
@@ -118,7 +118,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: ${PLUGINS_PATH}/${CUSTOM_XBLOCK}
+        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin/${CUSTOM_XBLOCK}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 
