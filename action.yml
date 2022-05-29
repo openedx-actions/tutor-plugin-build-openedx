@@ -102,7 +102,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-theme-repository }}
-        path: ${THEMES_PATH}/custom-edx-theme
+        path: ./tutor/env/build/openedx/themes/custom-edx-theme
         token: ${{ github.token }}
         ref: ${{ inputs.custom-theme-repository_ref }}
 
@@ -118,7 +118,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin/${CUSTOM_XBLOCK}
+        path: ./tutor/env/build/openedx/requirements/custom-edx-plugin/${{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 
@@ -134,4 +134,6 @@ runs:
         ls $THEMES_PATH -lha
         echo "plugins folder:"
         ls $PLUGINS_PATH -lha
+        echo "custom-edx-plugin looks like this:"
+        ls $PLUGINS_PATH/custom-edx-plugin -lha
       shell: bash
