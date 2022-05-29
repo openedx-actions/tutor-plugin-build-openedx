@@ -139,6 +139,5 @@ runs:
     - name: Docker image:tag
       id: docker-image
       run: |
-        echo "DOCKER_IMAGE=${{ inputs.aws-ecr-registry }}/${{ inputs.aws-ecr-repository }}:${REPOSITORY_TAG}" >> ${{ github.env }}
-        echo "::set-output name=uri::$(echo $DOCKER_IMAGE)"
+        echo "::set-output name=uri::$(echo $DOCKER_IMAGE_OPENEDX)"
       shell: bash
