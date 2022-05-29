@@ -26,3 +26,7 @@ cat <<EOT>> ${PLUGINS_PATH}/private.txt
 -e ./custom-edx-plugin
 -e ./${CUSTOM_XBLOCK}
 EOT
+
+echo "saved to ${PLUGINS_PATH}/private.txt"
+echo "file looks like this...."
+cat ${PLUGINS_PATH}/private.txt"

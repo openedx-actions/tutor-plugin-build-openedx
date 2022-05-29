@@ -95,7 +95,7 @@ runs:
     - name: Set Tutor-dependent environment variables
       run: |
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
-        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> ${{ github.env }}
+        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements" >> ${{ github.env }}
       shell: bash
 
     - name: Checkout custom theme repo
