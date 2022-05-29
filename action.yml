@@ -140,7 +140,7 @@ runs:
         repository: ${{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}
         path: ${PLUGINS_PATH}/{{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
-        ref: master
+        ref: ${{ inputs.custom-xblock-repository-ref }}
 
     - name: Add private.txt requirements
       id: add-requirements
