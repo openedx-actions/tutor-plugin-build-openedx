@@ -92,30 +92,10 @@ runs:
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements/" >> ${{ github.env }}
-        echo "PLUGIN_REPO=${{ inputs.custom-plugin-repository }}" >> ${{ github.env }}
-        echo "PLUGIN_REPO_REF=${{ inputs.custom-plugin-repository-ref }}" >> ${{ github.env }}
-        echo "THEME_REPO=${{ inputs.custom-theme-repository }}" >> ${{ github.env }}
-        echo "THEME_REPO_REF=${{ inputs.custom-theme-repository-ref }}" >> ${{ github.env }}
-        echo "XBLOCK_NAME=${{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
-        echo "XBLOCK_REPO=${{ inputs.custom-xblock-repository-organization }}/{{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
 
-        echo "custom-theme-repository=${{ inputs.custom-theme-repository }}"
-        echo "AWS_ECR_REGISTRY=$AWS_ECR_REGISTRY"
-        echo "AWS_ECR_REGISTRY=${AWS_ECR_REGISTRY}"
-        echo "ECR_REPOSITORY=${ECR_REPOSITORY}"
         echo "REPOSITORY_TAG=${REPOSITORY_TAG}"
         echo "THEMES_PATH=${THEMES_PATH}"
         echo "PLUGINS_PATH=${PLUGINS_PATH}"
-        echo "REPOSITORY_TAG=$REPOSITORY_TAG"
-        echo "THEMES_PATH=$THEMES_PATH"
-        echo "PLUGINS_PATH=$PLUGINS_PATH"
-        echo "PLUGIN_REPO=$PLUGIN_REPO"
-        echo "PLUGIN_REPO_REF=$PLUGIN_REPO_REF"
-        echo "THEME_REPO=$THEME_REPO"
-        echo "THEME_REPO_REF=$THEME_REPO_REF"
-        echo "XBLOCK_NAME=$XBLOCK_NAME"
-        echo "XBLOCK_REPO=$XBLOCK_REPO"
-
       shell: bash
 
     - name: Checkout custom theme repo
