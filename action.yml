@@ -66,22 +66,23 @@ runs:
       with:
         aws-ecr-repository: ${{ inputs.aws-ecr-repository }}
 
+    - name: Install Tutor
+      id: install-tutor
+      run: ${{ github.action_path }}/scripts/install-tutor.sh
+      shell: bash
+
     - name: Intialize environment variables
       id: init-env
       run: |
         echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> ${{ github.env }}
         echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
         echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
-      shell: bash
-
-    - name: Install Tutor
-      id: install-tutor
-      run: ${{ github.action_path }}/scripts/install-tutor.sh
+        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
       shell: bash
 
     - name: Render Tutor Config
       id: tutor-config-save
-      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}
+      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${DOCKER_IMAGE_OPENEDX}
       shell: bash
 
     - name: Set Tutor-dependent environment variables
