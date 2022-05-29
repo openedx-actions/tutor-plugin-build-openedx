@@ -80,6 +80,12 @@ runs:
         echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
       shell: bash
 
+    - name: Initialize Docker image URI
+      id: init-docker-image
+      run: |
+        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
+      shell: bash
+
     - name: Render Tutor Config
       id: tutor-config-save
       run: tutor config save --set DOCKER_IMAGE_OPENEDX=${DOCKER_IMAGE_OPENEDX}
