@@ -59,7 +59,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3.0.2
 
     - name: Set up Docker Buildx
       id: setup-docker
@@ -109,7 +109,7 @@ runs:
       shell: bash
 
     - name: Checkout custom theme repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-theme-repository }}
         path: ${{ github.action_path }}/tutor/env/build/openedx/themes/custom-edx-theme
@@ -117,7 +117,7 @@ runs:
         ref: ${{ inputs.custom-theme-repository_ref }}
 
     - name: Checkout custom edx plugin repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-plugin-repository-organization }}/${{ inputs.custom-plugin-repository }}
         path: ${{ github.action_path }}/tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
@@ -125,7 +125,7 @@ runs:
         ref: ${{ inputs.custom-plugin-repository-ref }}
 
     - name: Checkout xblock repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
         path: ${{ github.action_path }}/tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
