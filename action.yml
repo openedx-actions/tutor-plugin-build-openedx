@@ -112,7 +112,7 @@ runs:
       uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-theme-repository }}
-        path: $(tutor config printroot)/tutor/env/build/openedx/themes/custom-edx-theme
+        path: ${THEMES_PATH}/custom-edx-theme
         token: ${{ github.token }}
         ref: ${{ inputs.custom-theme-repository_ref }}
 
@@ -120,7 +120,7 @@ runs:
       uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-plugin-repository-organization }}/${{ inputs.custom-plugin-repository }}
-        path: $(tutor config printroot)/tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
+        path: ${PLUGINS_PATH}/${{ inputs.custom-plugin-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-plugin-repository-ref }}
 
@@ -128,7 +128,7 @@ runs:
       uses: actions/checkout@v3.0.2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: $(tutor config printroot)/tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
+        path: ${PLUGINS_PATH}/${{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 
