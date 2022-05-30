@@ -16,15 +16,15 @@ cat <<EOT>> ${PLUGINS_PATH}/private.txt
 # folder and then add your requirement with the `-e` flag. Ex:
 #
 #   git clone git@myserver:myprivaterepo.git
-#   echo "-e $GITHUB_WORKSPACE/myprivaterepo/" >> private.txt
+#   echo "-e ${{ github.action_path }}/myprivaterepo/" >> private.txt
 
 #git+https://github.com/Stanford-Online/xblock-in-video-quiz
 #git+https://github.com/open-craft/xblock-activetable.git
 #factory_boy
 #django-debug-toolbar
 
--e $GITHUB_WORKSPACE/${CUSTOM_PLUGIN}
--e $GITHUB_WORKSPACE/${CUSTOM_XBLOCK}
+-e ${{ github.action_path }}/${CUSTOM_PLUGIN}
+-e ${{ github.action_path }}/${CUSTOM_XBLOCK}
 EOT
 
 echo "saved to ${PLUGINS_PATH}/private.txt"

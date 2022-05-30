@@ -77,7 +77,7 @@ runs:
 
     - name: Install Tutor
       id: install-tutor
-      run: $GITHUB_WORKSPACE/scripts/install-tutor.sh
+      run: ${{ github.action_path }}/scripts/install-tutor.sh
       shell: bash
 
     - name: Intialize environment variables
@@ -112,7 +112,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-theme-repository }}
-        path: $GITHUB_WORKSPACE/tutor/env/build/openedx/themes/custom-edx-theme
+        path: ${{ github.action_path }}/tutor/env/build/openedx/themes/custom-edx-theme
         token: ${{ github.token }}
         ref: ${{ inputs.custom-theme-repository_ref }}
 
@@ -120,7 +120,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-plugin-repository-organization }}/${{ inputs.custom-plugin-repository }}
-        path: $GITHUB_WORKSPACE/tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
+        path: ${{ github.action_path }}/tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-plugin-repository-ref }}
 
@@ -128,13 +128,13 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: $GITHUB_WORKSPACE/tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
+        path: ${{ github.action_path }}/tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
         token: ${{ github.token }}
         ref: ${{ inputs.custom-xblock-repository-ref }}
 
     - name: Add private.txt requirements
       id: add-requirements
-      run: $GITHUB_WORKSPACE/scripts/add-requirements.sh
+      run: ${{ github.action_path }}/scripts/add-requirements.sh
       shell: bash
 
     - name: Review theme and requirements folders
@@ -153,7 +153,7 @@ runs:
 
     - name: Push the image
       id: docker-push-image
-      run: $GITHUB_WORKSPACE/scripts/upload-to-aws-ecr.sh
+      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
       shell: bash
 
     - name: Docker image:tag
