@@ -45,6 +45,7 @@ jobs:
         uses: openedx-actions/tutor-plugin-build-openedx
         with:
           aws-ecr-repo: openedx
+
           custom-theme-repository: 'lpm0073/edx-theme-example'
           custom-theme-repository-ref: 'master'
 
