@@ -10,7 +10,7 @@
 #  - https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 #  - https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
 #------------------------------------------------------------------------------
-name: '"Tutor Build openedx" Action For GitHub Actions'
+name: Open edX Tutor k8s build openedx
 description: 'Use Tutor to build a Docker container of openedx, and upload to AWS ECR'
 branding:
   icon: 'cloud'
