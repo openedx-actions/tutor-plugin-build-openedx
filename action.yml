@@ -83,18 +83,18 @@ runs:
     - name: Intialize environment variables
       id: init-env
       run: |
-        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> ${{ github.env }}
-        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> ${{ github.env }}
-        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> ${{ github.env }}
-        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
-        echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> ${{ github.env }}
-        echo "CUSTOM_PLUGIN=${{ inputs.custom-plugin-repository }}" >> ${{ github.env }}
+        echo "AWS_ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+        echo "AWS_ECR_REPOSITORY=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
+        echo "REPOSITORY_TAG=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> $GITHUB_ENV
+        echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
+        echo "CUSTOM_PLUGIN=${{ inputs.custom-plugin-repository }}" >> $GITHUB_ENV
       shell: bash
 
     - name: Initialize Docker image URI
       id: init-docker-image
       run: |
-        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> ${{ github.env }}
+        echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG}" >> $GITHUB_ENV
       shell: bash
 
     - name: Render Tutor Config
@@ -104,8 +104,8 @@ runs:
 
     - name: Set Tutor-dependent environment variables
       run: |
-        echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> ${{ github.env }}
-        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements" >> ${{ github.env }}
+        echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> $GITHUB_ENV
+        echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements" >> $GITHUB_ENV
       shell: bash
 
     - name: Checkout custom theme repo
