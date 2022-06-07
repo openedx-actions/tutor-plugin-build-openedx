@@ -5,5 +5,5 @@
 #
 #---------------------------------------------------------
 tutor images push openedx
-docker tag ${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:${REPOSITORY_TAG} ${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:latest
-docker push ${AWS_ECR_REGISTRY}/${AWS_ECR_REPOSITORY}:latest
+docker tag ${AWS_ECR_REGISTRY_OPENEDX}/${AWS_ECR_REPOSITORY_OPENEDX}:${REPOSITORY_TAG_OPENEDX} ${AWS_ECR_REGISTRY_OPENEDX}/${AWS_ECR_REPOSITORY_OPENEDX}:latest
+docker push ${AWS_ECR_REGISTRY_OPENEDX}/${AWS_ECR_REPOSITORY_OPENEDX}:latest
