@@ -39,6 +39,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.THE_NAME_OF_YOUR_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
+      # install and configure tutor and kubectl
+      - name: Configure Github workflow environment
+        uses: openedx-actions/tutor-k8s-init@v0.0.1
+
       # This action.
       # Note that aws-ecr-repo is optional. The default value is openedx
       - name: Build the image and upload to AWS ECR
