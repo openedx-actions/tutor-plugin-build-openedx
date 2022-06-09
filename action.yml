@@ -2,8 +2,8 @@
 # Build and push a Docker image constisting of
 #   - edx-platform
 #   - custom theme repository
-#   - custom Open edX plugin
-#   - custom Xblock
+#   - any additional Python requirements that were previously added with
+#     openedx-actions/tutor-plugin-build-openedx-add-requirement
 #
 # see
 #  - https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
@@ -23,35 +23,18 @@ inputs:
   custom-theme-repository:
     description: 'URL for the Open edX custom theme to use for this build'
     required: false
-    default: 'lpm0073/edx.custom-theme'
+    default: 'edx.custom-theme'
+  custom-theme-repository-organization:
+    description: 'The github organization containing the Open edX custom theme repository'
+    required: false
+    default: 'lpm0073'
   custom-theme-repository-ref:
     description: 'branch or release of the Open edX custom theme'
     required: false
     default: 'master'
-  custom-plugin-repository:
-    description: 'URL for the Open edX custom plugin to use for this build'
+  custom-theme-repository-token:
+    description: Github access token for the repository, if it is private
     required: false
-    default: 'openedx-plugin-example'
-  custom-plugin-repository-organization:
-    description: 'the Github organization containing the custom plugin repository to install for this build'
-    required: false
-    default: 'lpm0073'
-  custom-plugin-repository-ref:
-    description: 'branch or release of the Open edX custom plugin'
-    required: false
-    default: 'main'
-  custom-xblock-repository:
-    description: 'Repository anme of the additional XBlock repository to install for this build'
-    required: false
-    default: 'edx-ora2'
-  custom-xblock-repository-organization:
-    description: 'the Github organization containing the XBlock repository to install for this build'
-    required: false
-    default: 'openedx'
-  custom-xblock-repository-ref:
-    description: 'branch or release of the XBlock repository'
-    required: false
-    default: 'master'
 outputs:
   docker-container-url:
     description: 'The URL of the AWS ECR Docker container that was created and uploaded'
@@ -75,88 +58,73 @@ runs:
       with:
         aws-ecr-repository: ${{ inputs.aws-ecr-repository }}
 
-    - name: Install Tutor
-      id: install-tutor
-      run: ${{ github.action_path }}/scripts/install-tutor.sh
-      shell: bash
-
     - name: Intialize environment variables
       id: init-env
+      shell: bash
       run: |
         echo "AWS_ECR_REGISTRY_OPENEDX=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
         echo "AWS_ECR_REPOSITORY_OPENEDX=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
         echo "REPOSITORY_TAG_OPENEDX=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
         echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
         echo "CUSTOM_PLUGIN=${{ inputs.custom-plugin-repository }}" >> $GITHUB_ENV
-      shell: bash
 
     - name: Initialize Docker image URI
       id: init-docker-image
+      shell: bash
       run: |
         echo "DOCKER_IMAGE_OPENEDX=${AWS_ECR_REGISTRY_OPENEDX}/${AWS_ECR_REPOSITORY_OPENEDX}:${REPOSITORY_TAG_OPENEDX}" >> $GITHUB_ENV
-      shell: bash
 
     - name: Render Tutor Config
       id: tutor-config-save
-      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${DOCKER_IMAGE_OPENEDX}
       shell: bash
+      run: tutor config save --set DOCKER_IMAGE_OPENEDX=${DOCKER_IMAGE_OPENEDX}
 
     - name: Set Tutor-dependent environment variables
+      shell: bash
       run: |
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> $GITHUB_ENV
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements" >> $GITHUB_ENV
-      shell: bash
 
     - name: Checkout custom theme repo
       uses: actions/checkout@v3.0.2
       with:
-        repository: ${{ inputs.custom-theme-repository }}
-        path: tutor/env/build/openedx/themes/custom-edx-theme
-        token: ${{ github.token }}
+        repository: ${{ inputs.custom-theme-repository-organization }}/${{ inputs.custom-theme-repository }}
+        path: ./custom-edx-theme
+        token: ${{ inputs.custom-theme-repository-token }}
         ref: ${{ inputs.custom-theme-repository_ref }}
 
-    - name: Checkout custom edx plugin repo
-      uses: actions/checkout@v3.0.2
-      with:
-        repository: ${{ inputs.custom-plugin-repository-organization }}/${{ inputs.custom-plugin-repository }}
-        path: tutor/env/build/openedx/requirements/${{ inputs.custom-plugin-repository }}
-        token: ${{ github.token }}
-        ref: ${{ inputs.custom-plugin-repository-ref }}
-
-    - name: Checkout xblock repo
-      uses: actions/checkout@v3.0.2
-      with:
-        repository: ${{ inputs.custom-xblock-repository-organization }}/${{ inputs.custom-xblock-repository }}
-        path: tutor/env/build/openedx/requirements/${{ inputs.custom-xblock-repository }}
-        token: ${{ github.token }}
-        ref: ${{ inputs.custom-xblock-repository-ref }}
-
-    - name: Add private.txt requirements
-      id: add-requirements
-      run: ${{ github.action_path }}/scripts/add-requirements.sh
+    - name: move repo into position
+      id: move-repo
       shell: bash
+      run: mv $GITHUB_WORKSPACE/custom-edx-theme $THEMES_PATH/custom-edx-theme
 
-    - name: Review theme and requirements folders
-      id: review-folders
-      run: |
-        echo "theme folder contents:"
-        ls $THEMES_PATH -lha
-        echo "plugins folder contents:"
-        ls $PLUGINS_PATH -lha
+    - name: ls the theme folder
+      id: ls-theme-folder
       shell: bash
+      run: ls $THEMES_PATH -lha
+
+    - name: ls the requirements folder
+      id: ls-requirements-folder
+      shell: bash
+      run: ls $PLUGINS_PATH -lha
+
+    - name: cat private.txt to console
+      id: cat-private-txt
+      shell: bash
+      run: cat $PLUGINS_PATH/private.txt
 
     - name: Build the image
       id: tutor-build-image
-      run: tutor images build openedx
       shell: bash
+      run: tutor images build openedx
 
     - name: Push the image
       id: docker-push-image
-      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
       shell: bash
+      run: ${{ github.action_path }}/scripts/upload-to-aws-ecr.sh
 
     - name: Docker image:tag
       id: docker-image
+      shell: bash
       run: |
         echo "::set-output name=uri::$(echo $DOCKER_IMAGE_OPENEDX)"
-      shell: bash
