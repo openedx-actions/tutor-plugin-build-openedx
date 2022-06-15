@@ -41,18 +41,13 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.11
+        uses: openedx-actions/tutor-k8s-init@v0.0.13
 
       # This action.
       # Note:
       # aws-ecr-repo is optional. The default value is openedx
-      # custom-theme-repository-token is optional. This is only needed for private repos
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.9
+        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.14
         with:
           aws-ecr-repo: openedx
-          custom-theme-repository: edx-theme-example
-          custom-theme-repository-organization: lpm0073
-          custom-theme-repository-ref: master
-          custom-theme-repository-token: ${{ secrets.PAT }}
 ```
