@@ -20,21 +20,6 @@ inputs:
     description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
     required: false
     default: 'openedx'
-  custom-theme-repository:
-    description: 'URL for the Open edX custom theme to use for this build'
-    required: false
-    default: 'edx.custom-theme'
-  custom-theme-repository-organization:
-    description: 'The github organization containing the Open edX custom theme repository'
-    required: false
-    default: 'lpm0073'
-  custom-theme-repository-ref:
-    description: 'branch or release of the Open edX custom theme'
-    required: false
-    default: 'master'
-  custom-theme-repository-token:
-    description: Github access token for the repository, if it is private
-    required: false
 outputs:
   docker-container-url:
     description: 'The URL of the AWS ECR Docker container that was created and uploaded'
@@ -84,19 +69,6 @@ runs:
       run: |
         echo "THEMES_PATH=$(tutor config printroot)/env/build/openedx/themes" >> $GITHUB_ENV
         echo "PLUGINS_PATH=$(tutor config printroot)/env/build/openedx/requirements" >> $GITHUB_ENV
-
-    - name: Checkout custom theme repo
-      uses: actions/checkout@v3.0.2
-      with:
-        repository: ${{ inputs.custom-theme-repository-organization }}/${{ inputs.custom-theme-repository }}
-        path: ./custom-edx-theme
-        token: ${{ inputs.custom-theme-repository-token }}
-        ref: ${{ inputs.custom-theme-repository_ref }}
-
-    - name: move repo into position
-      id: move-repo
-      shell: bash
-      run: mv $GITHUB_WORKSPACE/custom-edx-theme $THEMES_PATH/custom-edx-theme
 
     - name: ls the theme folder
       id: ls-theme-folder
