@@ -1,8 +1,8 @@
 # Change Log
 
-## Version 0.1.8 (2022-05-30)
+## Version 1.0.0 (2022-06-16)
 
-Initial production version.
+General production release.
 
 ## Version 0.0.1 (2022-05-28)
 

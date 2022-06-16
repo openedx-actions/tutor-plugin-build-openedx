@@ -11,6 +11,9 @@
 
 Github Action that uses Tutor to build a Docker image for openedx, and uploads to an AWS Elastic Container Registry repository.
 
+This action was originally created to work seamlessly with AWS EKS Kubernetes and ECR resources created by the Terraform modules contained in [Cookiecutter Tutor Open edX Production Devops Tools](https://github.com/lpm0073/cookiecutter-openedx-devops) but it should also work with your own custom workflows.
+
+
 ## About the openedx image
 
 This is a production-ready image of the Open edX learning management system, substantially consisting of the repository [https://github.com/openedx/edx-platform](https://github.com/openedx/edx-platform).
@@ -41,13 +44,13 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v0.0.13
+        uses: openedx-actions/tutor-k8s-init@v1.0.0
 
       # This action.
       # Note:
       # aws-ecr-repo is optional. The default value is openedx
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v0.1.14
+        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.0
         with:
           aws-ecr-repo: openedx
 ```
