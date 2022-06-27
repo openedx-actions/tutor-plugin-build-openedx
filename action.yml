@@ -50,8 +50,6 @@ runs:
         echo "AWS_ECR_REGISTRY_OPENEDX=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
         echo "AWS_ECR_REPOSITORY_OPENEDX=${{ inputs.aws-ecr-repository }}" >> $GITHUB_ENV
         echo "REPOSITORY_TAG_OPENEDX=$TUTOR_VERSION-$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-        echo "CUSTOM_XBLOCK=${{ inputs.custom-xblock-repository }}" >> $GITHUB_ENV
-        echo "CUSTOM_PLUGIN=${{ inputs.custom-plugin-repository }}" >> $GITHUB_ENV
 
     - name: Initialize Docker image URI
       id: init-docker-image
