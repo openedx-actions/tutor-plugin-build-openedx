@@ -20,6 +20,14 @@ inputs:
     description: 'The name of the repository inside your AWS Elastic Container Registry (ECR) in which the newly created container will be uploaded and tagged. Defaults to "openedx"'
     required: false
     default: 'openedx'
+  openedx-repository:
+    description: 'The web url of the repository that holds the openedx code. This should only be set when using a forked version of openedx. Defaults to an empty string, which uses the tutor default'
+    required: false
+    default: ''
+  openedx-version:
+    description: 'The version of openedx to deploy. This corresponds to a branch or tag name in the openedx repository. Defaults to an empty string, which uses the tutor default'
+    required: false
+    default: ''
 outputs:
   docker-container-url:
     description: 'The URL of the AWS ECR Docker container that was created and uploaded'
@@ -86,7 +94,9 @@ runs:
     - name: Build the image
       id: tutor-build-image
       shell: bash
-      run: tutor images build openedx
+      run: |
+        tutor images build ${{ inputs.openedx-repository != '' && format('-a EDX_PLATFORM_REPOSITORY={0}', inputs.openedx-repository) || '' }} \
+          ${{ inputs.openedx-version != '' && format('-a EDX_PLATFORM_VERSION={0}', inputs.openedx-version) || '' }} openedx
 
     - name: Push the image
       id: docker-push-image
