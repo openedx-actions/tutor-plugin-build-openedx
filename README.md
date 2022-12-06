@@ -78,15 +78,15 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v1.0.0
+        uses: openedx-actions/tutor-k8s-init@v1.0.4
 
       # This action.
       # Note:
       # aws-ecr-repo is optional. The default value is openedx
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.0
+        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.1
         with:
           aws-ecr-repo: openedx
           openedx-repository: https://github.com/openedx/edx-platform.git
-          openedx-version: main #in this casem the main branch is specified. You may also specify a tag
+          openedx-version: main #in this case the main branch is specified. You may also specify a tag
 ```
