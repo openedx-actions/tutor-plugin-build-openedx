@@ -101,7 +101,7 @@ runs:
       shell: bash
       run: |
         tutor images build ${{ inputs.openedx-repository != '' && format('-a EDX_PLATFORM_REPOSITORY={0}', inputs.openedx-repository) || '' }} \
-          ${{ inputs.openedx-version != '' && format('-a EDX_PLATFORM_VERSION={0}', inputs.openedx-version) || '' }} openedx
+          ${{ inputs.openedx-version != '' && format('-a OPENEDX_COMMON_VERSION={0}', inputs.openedx-version) || '' }} openedx
 
     - name: Push the image
       id: docker-push-image
