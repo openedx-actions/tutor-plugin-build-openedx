@@ -1,5 +1,8 @@
 # Change Log
 
+## Unreleased
+* [BugFix] Change EDX_PLATFORM_VERSION to OPENEDX_COMMON_VERSION
+
 ## Version 1.0.0 (2022-06-16)
 
 General production release.
