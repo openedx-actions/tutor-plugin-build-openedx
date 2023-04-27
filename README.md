@@ -32,11 +32,11 @@ jobs:
 
     steps:
       # required antecedent
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.5.0
 
       # required antecedent
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.THE_NAME_OF_YOUR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.THE_NAME_OF_YOUR_AWS_SECRET_ACCESS_KEY }}
@@ -44,7 +44,7 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v1.0.0
+        uses: openedx-actions/tutor-k8s-init@v1.0.8
 
       # This action.
       # Note:
@@ -66,11 +66,11 @@ jobs:
 
     steps:
       # required antecedent
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.5.0
 
       # required antecedent
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.THE_NAME_OF_YOUR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.THE_NAME_OF_YOUR_AWS_SECRET_ACCESS_KEY }}
@@ -78,15 +78,17 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v1.0.4
+        uses: openedx-actions/tutor-k8s-init@v1.0.8
 
       # This action.
       # Note:
-      # aws-ecr-repo is optional. The default value is openedx
+      # aws-ecr-repository is optional. The default value is openedx
+      # openedx-repository is optional. The default value is ''
+      # openedx-version is optional. The default value is ''
       - name: Build the image and upload to AWS ECR
         uses: openedx-actions/tutor-plugin-build-openedx@v1.0.1
         with:
-          aws-ecr-repo: openedx
+          aws-ecr-repository: openedx
           openedx-repository: https://github.com/openedx/edx-platform.git
-          openedx-version: main #in this case the main branch is specified. You may also specify a tag
+          openedx-version: master #in this case the main branch is specified. You may also specify a tag
 ```
