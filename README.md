@@ -1,8 +1,9 @@
 <img src="https://avatars.githubusercontent.com/u/40179672" width="75">
 
-[![hack.d Lawrence McDaniel](https://img.shields.io/badge/hack.d-Lawrence%20McDaniel-orange.svg)](https://lawrencemcdaniel.com)
-[![discuss.overhang.io](https://img.shields.io/static/v1?logo=discourse&label=Forums&style=flat-square&color=ff0080&message=discuss.overhang.io)](https://discuss.overhang.io)
-[![docs.tutor.overhang.io](https://img.shields.io/static/v1?logo=readthedocs&label=Documentation&style=flat-square&color=blue&message=docs.tutor.overhang.io)](https://docs.tutor.overhang.io)<br/>
+[![Tests](https://github.com/openedx-actions/tutor-plugin-build-openedx/actions/workflows/testRelease.yml/badge.svg)](https://github.com/openedx-actions/tutor-plugin-build-openedx/actions)
+[![Open edX Discussion](https://img.shields.io/static/v1?logo=discourse&label=Forums&style=flat-square&color=000000&message=discuss.openedx.org)](https://discuss.openedx.org/)
+[![docs.tutor.overhang.io](https://img.shields.io/static/v1?logo=readthedocs&label=Documentation&style=flat-square&color=blue&message=docs.tutor.overhang.io)](https://docs.tutor.overhang.io)
+[![hack.d Lawrence McDaniel](https://img.shields.io/badge/hack.d-Lawrence%20McDaniel-orange.svg)](https://lawrencemcdaniel.com)<br/>
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
@@ -13,13 +14,11 @@ Github Action that uses Tutor to build a Docker image for openedx, and uploads t
 
 This action was originally created to work seamlessly with AWS EKS Kubernetes and ECR resources created by the Terraform modules contained in [Cookiecutter Tutor Open edX Production Devops Tools](https://github.com/lpm0073/cookiecutter-openedx-devops) but it should also work with your own custom workflows.
 
-
 ## About the openedx image
 
 This is a production-ready image of the Open edX learning management system, substantially consisting of the repository [https://github.com/openedx/edx-platform](https://github.com/openedx/edx-platform).
 
-## Usage:
-
+## Usage
 
 ```yaml
 name: Example workflow
@@ -86,7 +85,7 @@ jobs:
       # openedx-repository is optional. The default value is ''
       # openedx-version is optional. The default value is ''
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.1
+        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.3
         with:
           aws-ecr-repository: openedx
           openedx-repository: https://github.com/openedx/edx-platform.git
