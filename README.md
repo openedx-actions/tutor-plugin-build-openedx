@@ -31,11 +31,11 @@ jobs:
 
     steps:
       # required antecedent
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout
 
       # required antecedent
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials
         with:
           aws-access-key-id: ${{ secrets.THE_NAME_OF_YOUR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.THE_NAME_OF_YOUR_AWS_SECRET_ACCESS_KEY }}
@@ -43,13 +43,13 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v1.0.8
+        uses: openedx-actions/tutor-k8s-init
 
       # This action.
       # Note:
       # aws-ecr-repo is optional. The default value is openedx
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.0
+        uses: openedx-actions/tutor-plugin-build-openedx
         with:
           aws-ecr-repo: openedx
 ```
@@ -65,11 +65,11 @@ jobs:
 
     steps:
       # required antecedent
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout
 
       # required antecedent
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials
         with:
           aws-access-key-id: ${{ secrets.THE_NAME_OF_YOUR_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.THE_NAME_OF_YOUR_AWS_SECRET_ACCESS_KEY }}
@@ -77,7 +77,7 @@ jobs:
 
       # install and configure tutor and kubectl
       - name: Configure Github workflow environment
-        uses: openedx-actions/tutor-k8s-init@v1.0.8
+        uses: openedx-actions/tutor-k8s-init
 
       # This action.
       # Note:
@@ -85,7 +85,7 @@ jobs:
       # openedx-repository is optional. The default value is ''
       # openedx-version is optional. The default value is ''
       - name: Build the image and upload to AWS ECR
-        uses: openedx-actions/tutor-plugin-build-openedx@v1.0.3
+        uses: openedx-actions/tutor-plugin-build-openedx
         with:
           aws-ecr-repository: openedx
           openedx-repository: https://github.com/openedx/edx-platform.git
