@@ -43,7 +43,7 @@ runs:
 
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1.6.1
+      uses: aws-actions/amazon-ecr-login@v1.6.2
 
     - name: Create the AWS ECR repository
       id: create-repository
