@@ -79,12 +79,12 @@ runs:
     - name: ls the theme folder
       id: ls-theme-folder
       shell: bash
-      run: ls $THEMES_PATH -lha
+      run: ls $THEMES_PATH -lha || true
 
     - name: ls the requirements folder
       id: ls-requirements-folder
       shell: bash
-      run: ls $PLUGINS_PATH -lha
+      run: ls $PLUGINS_PATH -lha || true
 
     - name: ensure that we have a private.txt
       id: touch-private-txt
