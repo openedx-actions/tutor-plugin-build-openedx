@@ -89,12 +89,14 @@ runs:
     - name: ensure that we have a private.txt
       id: touch-private-txt
       shell: bash
-      run: touch $PLUGINS_PATH/private.txt
+      run: |
+        mkdir -p $(dirname $PLUGINS_PATH/private.txt)
+        touch $PLUGINS_PATH/private.txt
 
     - name: cat private.txt to console
       id: cat-private-txt
       shell: bash
-      run: cat $PLUGINS_PATH/private.txt
+      run: cat $PLUGINS_PATH/private.txt || true
 
     - name: Build the image
       id: tutor-build-image
