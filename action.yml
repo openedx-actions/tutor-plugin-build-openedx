@@ -47,7 +47,7 @@ runs:
 
     - name: Create the AWS ECR repository
       id: create-repository
-      uses: cookiecutter-openedx/aws-ecr-create@v0.1.1
+      uses: cookiecutter-openedx/aws-ecr-create@v0.1.2
       with:
         aws-ecr-repository: ${{ inputs.aws-ecr-repository }}
 
